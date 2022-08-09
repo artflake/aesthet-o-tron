@@ -1,9 +1,9 @@
 server_url = 'grpcs://dalle-flow.dev.jina.ai'
 
-import requests, datetime
+import requests, datetime, sys
 from random import randrange
 
-for _ in range(20):
+for _ in range(int(sys.argv[1])):
 
   styles = requests.get("https://gist.github.com/doteater/a5f70e6560e6c3af202c8adcda9dc47a/raw")
   subjects = requests.get("https://gist.github.com/doteater/fd36f350e3b2c8a358b1260ef0f2c6bd/raw")
@@ -18,7 +18,7 @@ for _ in range(20):
 
 
   from docarray import Document
-
+  
   print('rendering...')
   da = Document(text=prompt).post(server_url, parameters={'num_images': 1}).matches
 
@@ -48,9 +48,9 @@ for _ in range(20):
 
 
 
-
+  
   print('upscaling...')
   fav = fav.post(f'{server_url}/upscale')
   fav.save_uri_to_file(f'output/{style} {subject}-{datetime.datetime.now()}.png')
-
+  
   print(f'done! inspect the gem: output/{style} {subject}-{datetime.datetime.now()}.png')
